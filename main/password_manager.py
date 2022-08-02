@@ -12,4 +12,21 @@ def password_generator():
     mixture=num+letter+letter_cap+symbol
 
     for x in range(maxlength-4):
-        print("The generated password is",random.choice(mixture),end="")
+        print(random.choice(mixture),end="")
+
+menyoo=1
+while menyoo==1:
+    print("--------------------------------------Password Manager---------------------------------------")
+    print("---------------------------------------version 1.0-------------------------------------------")
+    print("""
+        1.Password Generator
+        2.Add a password
+        3.View saved passwords
+    """)
+    choice=int(input("Enter your choice: "))
+    if choice==1:
+        password_generator()
+    if choice==2:
+        print
+    if choice==3:
+        print
