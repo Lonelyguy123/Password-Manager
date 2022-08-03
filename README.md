@@ -1,6 +1,9 @@
 # password-manager
 A simple password generator and password manager using Python
 
+# Pre-Requisites
+- Python 3.10 (included in the folder)
+
 # Menu
 Menu contains all the avaliable options in the app, just mention the option number to use the feature
 
