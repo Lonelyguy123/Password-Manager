@@ -1,23 +1,15 @@
-import mysql
-import mysql.connector
+import sqlite3
 
-conn=mysql.connector.connect(host='localhost',
-                            user="root",
-                            password="123rootsql")
+conn=sqlite3.connect('passwordmng.db')
                             
-if conn.is_connected():
-    print("""--------------------------------Password Manager----------------------------------
+
     
-    """)
-    
-cursor=conn.connect()
+
 cur=conn.cursor()
 
 
 def install():
-    cur.execute("CREATE DATABASE passwordmng;")
-    cur.execute("use passwordmng;")
-    cur.execute("CREATE TABLE passwordmanager(name varchar(15),website varchar(30),password varchar(30));")
+    cur.execute("CREATE TABLE passwordmanager(name varchar(15),website varchar(30),password varchar(30))")
     conn.commit()
     print("Application setup successfully finished")
 
@@ -39,36 +31,49 @@ def gen():
         else:
             password = password + symbol[random.randint(0,8)]
     print("generated password -  ",password)
-    name = input("enter your name ")
-    website = input("enter the website corressponding to the password")
-    cur.execute("INSERT INTO passwordmanager(name,website,password) VALUES('{}','{}','{}');".format(name,website,password))
+    name = input("Enter your name: ")
+    website = input("Enter the website corressponding to the password: ")
+    cur.execute("INSERT INTO passwordmanager(name,website,password) VALUES(?,?,?)",(name,website,password))
     conn.commit()
     print("Entry successfully registered")
 
 def find():
-    name = input("enter your name ")
-    website = input("enter the website's name")
-    cur.execute("SELECT * FROM passwordmanager WHERE name = '{}' AND website = '{}';".format(name,website))
+    name = input("Enter your name: ")
+    website = input("Enter the website's name: ")
+    cur.execute("SELECT * FROM passwordmanager WHERE name = ? AND website = ?",(name,website))
     print("Here is the entry registered pertaining to the above details")
     print(cur.fetchone())
 
 def findall():
     name = input("enter your name")
-    cur.execute("SELECT * FROM passwordmanager2 WHERE name = '{}';").format(name)
+    cur.execute("SELECT * FROM passwordmanager WHERE name = '{}'".format(name))
     print("Here are all the entries pertaining to the name -  ",name)
     print(cur.fetchall())
+
+def manual():
+    name = input("Enter your name: ")
+    website = input("Enter the website's name: ")
+    password = input("Enter the password: ")
+    cur.execute("INSERT INTO passwordmanager(name,website,password) VALUES(?,?,?)",(name,website,password))
+    conn.commit()
+    print("Entry successfully registered")
      
 c =1     
 while c in[1,4] :
+   print("""--------------------------------Password Manager----------------------------------
+    
+            --------------------------------Version 1.0---------------------------------------
+    """)
    print("Menu")
    print("1.Install the application")
-   print("2.generate a password")
-   print("3.retrieve a password")
-   print("4.retrieve all the passwords pertaining to a specific user")
-   print("5.exit the application")
+   print("2.Generate a password and store it")
+   print("3.Retrieve a password")
+   print("4.Retrieve all the passwords pertaining to a specific user")
+   print("5.Assign a password manually and store it")
+   print("6.Exit the application")
 
 
-   mento= int(input("enter your choice"))
+   mento= int(input("enter your choice: "))
    if mento==1:
         install()
    elif mento==2:
@@ -78,4 +83,6 @@ while c in[1,4] :
    elif mento==4:
         findall()
    elif mento==5:
+        manual()
+   elif mento==6:
         break
